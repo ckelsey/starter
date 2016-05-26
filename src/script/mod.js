@@ -6,4 +6,4 @@
             link: function(scope,elm,attrs){}
         };
     });
-})(angular.module('starter'));
+})(angular.module('starter', []));
