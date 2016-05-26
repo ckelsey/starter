@@ -1,0 +1,7 @@
+- Enter name of app, then updates:
+	- package.json - name
+	- readme
+	- index.html - name of "app"
+	- 404.html - name of "app"
+	- app.js
+	- creates demo directives, factory, etc in src/script

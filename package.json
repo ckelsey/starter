@@ -1,0 +1,59 @@
+{
+    "name": "starter",
+    "version": "1.0.0",
+    "description": "Starter app for angular",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/ckelsey/starter.git"
+    },
+    "keywords": [],
+    "author": "Chris Kelsey",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/ckelsey/starter/issues"
+    },
+    "homepage": "https://github.com/ckelsey/starter/#readme",
+    "dependencies": {
+        "bower": "^*",
+        "gulp": "^*",
+        "gulp-autoprefixer": "^*",
+        "gulp-compass": "^*",
+        "gulp-composer": "^*",
+        "gulp-concat": "^*",
+        "gulp-concat-sourcemap": "^*",
+        "gulp-livereload": "^*",
+        "gulp-markdown": "^*",
+        "gulp-clean-css": "^*",
+        "gulp-minify-html": "^*",
+        "gulp-ng-annotate": "^*",
+        "gulp-ng-html2js": "^*",
+        "gulp-notify": "^*",
+        "gulp-plumber": "^*",
+        "gulp-rename": "^*",
+        "gulp-sourcemaps": "^*",
+        "gulp-uglify": "^*",
+        "gulp-usemin": "^*",
+        "gulp-util": "^*",
+        "lodash": "^*",
+        "minimize": "^*",
+        "through2": "^*",
+        "vinyl-fs": "^*",
+        "fs": "^*",
+        "gulp-angular-embed-templates": "^*",
+        "q": "^*"
+    },
+    "devDependencies": {},
+    "scripts": {
+        "bower": "gulp bower",
+        "postinstall": "gulp bower && bower install && nginx_local && gulp"
+    },
+    "bower": {
+        "angular": "latest",
+        "angular-animate": "latest",
+        "angular-loader": "latest",
+        "angular-mocks": "latest",
+        "angular-resource": "latest",
+        "angular-route": "latest",
+        "angular-sanitize": "latest"
+    }
+}
