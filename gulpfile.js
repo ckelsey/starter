@@ -66,9 +66,29 @@ gulp.task('nginx_local', function() {
     var file = 'server { listen ' + appName + '.loc; server_name ' + appName + '.loc; root ' + base + '; index index.html; }';
 
     fs.writeFile('./' + filename, file, function() {
-        fs.symlink(base + filename, '/usr/local/etc/nginx/servers', function() {
-            d.resolve(true);
-        });
+        // fs.symlink(base + filename, '/usr/local/etc/nginx/servers/', function() {
+        //     d.resolve(true);
+        // });
+		d.resolve(true);
+    });
+
+    return d.promise;
+});
+
+
+gulp.task('install', function() {
+    var d = q.defer();
+	var html = '<!doctype html><html ng-app="app"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="description" content=""><meta name="viewport" content="width=device-width"><link rel="stylesheet" href="dist/css/' + appName + '.min.css"><link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css"></head><body ng-controller="AppCtlr as app"><div ng-view=""></div><script src="dist/js/' + appName + '_vendor.min.js"></script><script src="app.js"></script><script src="dist/js/' + appName + '.min.js"></script></body></html>';
+
+    fs.writeFile('./index.html', html, function() {
+		fs.writeFile('./404.html', html, function() {
+			var filename = appName + '.loc.conf';
+		    var base = path.dirname(fs.realpathSync(__filename)) + '/';
+		    var file = 'server { listen ' + appName + '.loc; server_name ' + appName + '.loc; root ' + base + '; index index.html; }';
+		    fs.writeFile('./' + filename, file, function() {
+		        d.resolve(true);
+		    });
+	    });
     });
 
     return d.promise;
@@ -87,7 +107,8 @@ gulp.task('bower', function() {
             ".gitignore",
             "node_modules",
             "bower_components",
-            ".sass-cache"
+            ".sass-cache",
+			"npm-debug.log"
         ],
         dependencies: pkg.bower
     };

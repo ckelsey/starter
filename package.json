@@ -45,7 +45,7 @@
     "devDependencies": {},
     "scripts": {
         "bower": "gulp bower",
-        "postinstall": "gulp bower && bower install && nginx_local && gulp"
+        "postinstall": "gulp bower && bower install && gulp install && gulp"
     },
     "bower": {
         "angular": "latest",
@@ -54,6 +54,7 @@
         "angular-mocks": "latest",
         "angular-resource": "latest",
         "angular-route": "latest",
-        "angular-sanitize": "latest"
+        "angular-sanitize": "latest",
+		"font-awesome": "latest"
     }
 }
