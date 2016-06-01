@@ -1,5 +1,5 @@
 - Enter name of app, then updates:
-	- package.json - name
+	- package.json - name, also wherever name is
 	- readme
 	- index.html - name of "app"
 	- 404.html - name of "app"

@@ -16,7 +16,8 @@ var gulp = require('gulp'),
     fs = require('fs'),
     q = require('q'),
     pkg = require('./package.json'),
-    sourcemaps = require('gulp-sourcemaps');
+    sourcemaps = require('gulp-sourcemaps'),
+	jshint = require('gulp-jshint');
 
 var notifyInfo = {
     title: 'Gulp',
@@ -159,6 +160,8 @@ gulp.task('app_scripts', function() {
             add: true
         }))
         .pipe(embedTemplates())
+		.pipe(jshint())
+    	.pipe(jshint.reporter('default'))
         .pipe(concat(appName + '.min.js'))
         .pipe(gulp.dest('dist/js'))
         .pipe(uglify())

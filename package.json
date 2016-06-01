@@ -40,7 +40,9 @@
         "vinyl-fs": "^*",
         "fs": "^*",
         "gulp-angular-embed-templates": "^*",
-        "q": "^*"
+        "q": "^*",
+		"jshint": "^*",
+		"gulp-jshint": "^*"
     },
     "devDependencies": {},
     "scripts": {
