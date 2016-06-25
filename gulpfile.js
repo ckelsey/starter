@@ -10,9 +10,7 @@ var gulp = require('gulp'),
     plumber = require('gulp-plumber'),
     path = require('path'),
     ngAnnotate = require('gulp-ng-annotate'),
-    minifyHtml = require('gulp-minify-html'),
     embedTemplates = require('gulp-angular-embed-templates'),
-    ngHtml2Js = require('gulp-ng-html2js'),
     fs = require('fs'),
     q = require('q'),
     pkg = require('./package.json'),
@@ -40,6 +38,10 @@ var stylesToDo = [
     'src/style/*.scss',
 ];
 
+var stylesToDoVender = [
+	'bower_components/font-awesome/css/font-awesome.min.css'
+];
+
 var htmlToDo = [
     '*.html',
     'src/html/*.html'
@@ -60,32 +62,33 @@ var vendor_scripts = [
 ];
 
 
-gulp.task('nginx_local', function() {
-    var d = q.defer();
-    var filename = appName + '.loc.conf';
-    var base = path.dirname(fs.realpathSync(__filename)) + '/';
-    var file = 'server { listen ' + appName + '.loc; server_name ' + appName + '.loc; root ' + base + '; index index.html; }';
-
-    fs.writeFile('./' + filename, file, function() {
-        // fs.symlink(base + filename, '/usr/local/etc/nginx/servers/', function() {
-        //     d.resolve(true);
-        // });
-		d.resolve(true);
-    });
-
-    return d.promise;
-});
-
-
 gulp.task('install', function() {
     var d = q.defer();
-	var html = '<!doctype html><html ng-app="app"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="description" content=""><meta name="viewport" content="width=device-width"><link rel="stylesheet" href="dist/css/' + appName + '.min.css"><link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css"></head><body ng-controller="AppCtlr as app"><div ng-view=""></div><script src="dist/js/' + appName + '_vendor.min.js"></script><script src="app.js"></script><script src="dist/js/' + appName + '.min.js"></script></body></html>';
+	var html = '<!doctype html>' + "\r" +
+		'<html ng-app="app">' + "\r" +
+		'<head>' + "\r" +
+			"\t" + '<meta charset="utf-8">' + "\r" +
+			"\t" + '<meta http-equiv="X-UA-Compatible" content="IE=edge">' + "\r" +
+			"\t" + '<meta name="description" content="">' + "\r" +
+			"\t" + '<meta name="viewport" content="width=device-width">' + "\r" +
+			"\t" + '<link rel="stylesheet" href="/dist/css/' + appName + '_vendor.min.css">' + "\r" +
+			"\t" + '<link rel="stylesheet" href="/dist/css/' + appName + '.min.css">' + "\r" +
+			"\t" + '<base href="/" />' + "\r" +
+		'</head>' + "\r" +
+		'<body ng-controller="AppCtlr as app">' + "\r" +
+			"\t" + '<navigation></navigation>' + "\r" +
+			"\t" + '<div ng-view=""></div>' + "\r" +
+			"\t" + '<script src="/dist/js/' + appName + '_vendor.min.js"></script>' + "\r" +
+			"\t" + '<script src="/app.js"></script>' + "\r" +
+			"\t" + '<script src="/dist/js/' + appName + '.min.js"></script>' + "\r" +
+		'</body>' + "\r" +
+		'</html>';
 
     fs.writeFile('./index.html', html, function() {
 		fs.writeFile('./404.html', html, function() {
 			var filename = appName + '.loc.conf';
 		    var base = path.dirname(fs.realpathSync(__filename)) + '/';
-		    var file = 'server { listen ' + appName + '.loc; server_name ' + appName + '.loc; root ' + base + '; index index.html; }';
+		    var file = 'server { listen ' + appName + '.loc; server_name ' + appName + '.loc; root ' + base + '; index index.html; error_page 404 404.html;}';
 		    fs.writeFile('./' + filename, file, function() {
 		        d.resolve(true);
 		    });
@@ -141,6 +144,17 @@ gulp.task('styles', function() {
         .pipe(gulp.dest('dist/css'));
 });
 
+gulp.task('styles_vendor', function() {
+	return gulp.src(stylesToDoVender)
+	.pipe(plumber(plumberErrorHandler))
+	.pipe(concat(appName + '_vendor.css'))
+	.pipe(rename({
+		suffix: '.min'
+	}))
+	.pipe(minifycss())
+	.pipe(gulp.dest('dist/css'));
+});
+
 
 gulp.task('vendor_scripts', function() {
     return gulp.src(vendor_scripts)
@@ -173,6 +187,7 @@ gulp.task('app_scripts', function() {
 gulp.task('live', function() {
     livereload.listen();
     gulp.watch(stylesToDo, ['styles']);
+	gulp.watch(stylesToDoVender, ['styles_vendor']);
     gulp.watch(vendor_scripts, ['vendor_scripts']);
     gulp.watch(app_scripts, ['app_scripts']);
     gulp.watch(htmlToDo, ['app_scripts']);
@@ -180,6 +195,7 @@ gulp.task('live', function() {
 
 gulp.task('default', [
             'styles',
+			'styles_vendor',
             'vendor_scripts',
             'app_scripts',
             'live'
