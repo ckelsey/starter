@@ -1,41 +1,41 @@
 var gulp = require('gulp'),
-    compass = require('gulp-compass'),
-    autoprefixer = require('gulp-autoprefixer'),
-    minifycss = require('gulp-clean-css'),
-    uglify = require('gulp-uglify'),
-    rename = require('gulp-rename'),
-    concat = require('gulp-concat'),
-    notify = require('gulp-notify'),
-    livereload = require('gulp-livereload'),
-    plumber = require('gulp-plumber'),
-    path = require('path'),
-    ngAnnotate = require('gulp-ng-annotate'),
-    embedTemplates = require('gulp-angular-embed-templates'),
-    fs = require('fs'),
-    q = require('q'),
-    pkg = require('./package.json'),
-    sourcemaps = require('gulp-sourcemaps'),
-	jshint = require('gulp-jshint');
+compass = require('gulp-compass'),
+autoprefixer = require('gulp-autoprefixer'),
+minifycss = require('gulp-clean-css'),
+uglify = require('gulp-uglify'),
+rename = require('gulp-rename'),
+concat = require('gulp-concat'),
+notify = require('gulp-notify'),
+livereload = require('gulp-livereload'),
+plumber = require('gulp-plumber'),
+path = require('path'),
+ngAnnotate = require('gulp-ng-annotate'),
+embedTemplates = require('gulp-angular-embed-templates'),
+fs = require('fs'),
+q = require('q'),
+pkg = require('./package.json'),
+sourcemaps = require('gulp-sourcemaps'),
+jshint = require('gulp-jshint');
 
 var notifyInfo = {
-    title: 'Gulp',
-    icon: path.join(__dirname, 'gulp.png')
+	title: 'Gulp',
+	icon: path.join(__dirname, 'gulp.png')
 };
 
 var plumberErrorHandler = {
-    errorHandler: notify.onError({
-        title: notifyInfo.title,
-        icon: notifyInfo.icon,
-        message: "Error: <%= error.message %>"
-    })
+	errorHandler: notify.onError({
+		title: notifyInfo.title,
+		icon: notifyInfo.icon,
+		message: "Error: <%= error.message %>"
+	})
 };
 
 
-var appName = pkg.name
+var appName = pkg.name === 'starter' ? path.basename(__dirname) : pkg.name;
 
 
 var stylesToDo = [
-    'src/style/*.scss',
+	'src/style/*.scss',
 ];
 
 var stylesToDoVender = [
@@ -43,103 +43,117 @@ var stylesToDoVender = [
 ];
 
 var htmlToDo = [
-    '*.html',
-    'src/html/*.html'
+	'*.html',
+	'src/html/*.html'
 ];
 
 var app_scripts = [
-    'src/script/*.js'
+	'src/script/*.js'
 ];
 
 var vendor_scripts = [
-    'bower_components/angular/angular.min.js',
-    'bower_components/angular-cookies/angular-cookies.js',
-    'bower_components/angular-resource/angular-resource.js',
-    'bower_components/angular-sanitize/angular-sanitize.js',
-    'bower_components/angular-route/angular-route.js',
-    'bower_components/angular-loader/angular-loader.js',
-    'bower_components/angular-animate/angular-animate.min.js'
+	'bower_components/angular/angular.min.js',
+	'bower_components/angular-cookies/angular-cookies.js',
+	'bower_components/angular-resource/angular-resource.js',
+	'bower_components/angular-sanitize/angular-sanitize.js',
+	'bower_components/angular-route/angular-route.js',
+	'bower_components/angular-loader/angular-loader.js',
+	'bower_components/angular-animate/angular-animate.min.js'
 ];
 
+gulp.task('teststuff', function() {
+	pkg.name = path.basename(__dirname);
+	fs.writeFileSync("./package.json", JSON.stringify(pkg, null, "\t"));
+	pkg = require('./package.json');
+	console.log(pkg);
+});
 
 gulp.task('install', function() {
-    var d = q.defer();
-	var html = '<!doctype html>' + "\r" +
-		'<html ng-app="app">' + "\r" +
-		'<head>' + "\r" +
-			"\t" + '<meta charset="utf-8">' + "\r" +
-			"\t" + '<meta http-equiv="X-UA-Compatible" content="IE=edge">' + "\r" +
-			"\t" + '<meta name="description" content="">' + "\r" +
-			"\t" + '<meta name="viewport" content="width=device-width">' + "\r" +
-			"\t" + '<link rel="stylesheet" href="/dist/css/' + appName + '_vendor.min.css">' + "\r" +
-			"\t" + '<link rel="stylesheet" href="/dist/css/' + appName + '.min.css">' + "\r" +
-			"\t" + '<base href="/" />' + "\r" +
-		'</head>' + "\r" +
-		'<body ng-controller="AppCtlr as app">' + "\r" +
-			"\t" + '<navigation></navigation>' + "\r" +
-			"\t" + '<div ng-view=""></div>' + "\r" +
-			"\t" + '<script src="/dist/js/' + appName + '_vendor.min.js"></script>' + "\r" +
-			"\t" + '<script src="/app.js"></script>' + "\r" +
-			"\t" + '<script src="/dist/js/' + appName + '.min.js"></script>' + "\r" +
-		'</body>' + "\r" +
-		'</html>';
+	var d = q.defer();
 
-    fs.writeFile('./index.html', html, function() {
+	if(pkg.name === 'starter'){
+		pkg.name = path.basename(__dirname);
+		fs.writeFileSync("./package.json", JSON.stringify(pkg, null, "\t"));
+		pkg = require('./package.json');
+		console.log(pkg);
+	}
+
+	var html = '<!doctype html>' + "\r" +
+	'<html ng-app="app">' + "\r" +
+	'<head>' + "\r" +
+	"\t" + '<meta charset="utf-8">' + "\r" +
+	"\t" + '<meta http-equiv="X-UA-Compatible" content="IE=edge">' + "\r" +
+	"\t" + '<meta name="description" content="">' + "\r" +
+	"\t" + '<meta name="viewport" content="width=device-width">' + "\r" +
+	"\t" + '<link rel="stylesheet" href="/dist/css/' + appName + '_vendor.min.css">' + "\r" +
+	"\t" + '<link rel="stylesheet" href="/dist/css/' + appName + '.min.css">' + "\r" +
+	"\t" + '<base href="/" />' + "\r" +
+	'</head>' + "\r" +
+	'<body ng-controller="AppCtlr as app">' + "\r" +
+	"\t" + '<navigation></navigation>' + "\r" +
+	"\t" + '<div ng-view=""></div>' + "\r" +
+	"\t" + '<script src="/dist/js/' + appName + '_vendor.min.js"></script>' + "\r" +
+	"\t" + '<script src="/app.js"></script>' + "\r" +
+	"\t" + '<script src="/dist/js/' + appName + '.min.js"></script>' + "\r" +
+	'</body>' + "\r" +
+	'</html>';
+
+	fs.writeFile('./index.html', html, function() {
 		var filename = appName + '.loc.conf';
 		var base = path.dirname(fs.realpathSync(__filename)) + '/';
 		var file = 'server { listen ' + appName + '.loc; server_name ' + appName + '.loc; root ' + base + '; index index.html; error_page 404 index.html;}';
 		fs.writeFile('./' + filename, file, function() {
 			d.resolve(true);
 		});
-    });
+	});
 
-    return d.promise;
+	return d.promise;
 });
 
 gulp.task('bower', function() {
-    var d = q.defer();
-    var bowerJson = {
-        _comment: 'THIS FILE IS AUTOMATICALLY GENERATED.  DO NOT EDIT.',
-        name: pkg.name,
-        version: pkg.version,
-        description: pkg.description,
-        ignore: [
-            ".DS_Store",
-            ".git",
-            ".gitignore",
-            "node_modules",
-            "bower_components",
-            ".sass-cache",
+	var d = q.defer();
+	var bowerJson = {
+		_comment: 'THIS FILE IS AUTOMATICALLY GENERATED.  DO NOT EDIT.',
+		name: pkg.name,
+		version: pkg.version,
+		description: pkg.description,
+		ignore: [
+			".DS_Store",
+			".git",
+			".gitignore",
+			"node_modules",
+			"bower_components",
+			".sass-cache",
 			"npm-debug.log"
-        ],
-        dependencies: pkg.bower
-    };
+		],
+		dependencies: pkg.bower
+	};
 
-    bowerJson = JSON.stringify(bowerJson, null, '\t')
+	bowerJson = JSON.stringify(bowerJson, null, '\t')
 
-    fs.writeFile('./bower.json', bowerJson, function() {
-        d.resolve(true);
-    });
+	fs.writeFile('./bower.json', bowerJson, function() {
+		d.resolve(true);
+	});
 
-    return d.promise;
+	return d.promise;
 });
 
 gulp.task('styles', function() {
-    return gulp.src(stylesToDo)
-        .pipe(plumber(plumberErrorHandler))
-        .pipe(gulp.dest('dist/css/build/sass'))
-        .pipe(compass({
-            css: 'dist/css/build/css',
-            sass: 'dist/css/build/sass',
-            image: 'app/css/images'
-        }))
-        .pipe(autoprefixer('last 2 version', 'Safari', 'ie', 'opera', 'ios', 'android', 'chrome', 'firefox'))
-        .pipe(concat(appName + '.css'))
-        .pipe(rename({
-            suffix: '.min'
-        }))
-        .pipe(minifycss())
-        .pipe(gulp.dest('dist/css'));
+	return gulp.src(stylesToDo)
+	.pipe(plumber(plumberErrorHandler))
+	.pipe(gulp.dest('dist/css/build/sass'))
+	.pipe(compass({
+		css: 'dist/css/build/css',
+		sass: 'dist/css/build/sass',
+		image: 'app/css/images'
+	}))
+	.pipe(autoprefixer('last 2 version', 'Safari', 'ie', 'opera', 'ios', 'android', 'chrome', 'firefox'))
+	.pipe(concat(appName + '.css'))
+	.pipe(rename({
+		suffix: '.min'
+	}))
+	.pipe(minifycss())
+	.pipe(gulp.dest('dist/css'));
 });
 
 gulp.task('styles_vendor', function() {
@@ -155,46 +169,46 @@ gulp.task('styles_vendor', function() {
 
 
 gulp.task('vendor_scripts', function() {
-    return gulp.src(vendor_scripts)
-        .pipe(plumber(plumberErrorHandler))
-        .pipe(concat(appName + '_vendor.min.js'))
-        .pipe(gulp.dest('dist/js'))
+	return gulp.src(vendor_scripts)
+	.pipe(plumber(plumberErrorHandler))
+	.pipe(concat(appName + '_vendor.min.js'))
+	.pipe(gulp.dest('dist/js'))
 });
 
 
 gulp.task('app_scripts', function() {
-    return gulp.src(app_scripts)
-        .pipe(plumber(plumberErrorHandler))
-        .pipe(sourcemaps.init())
-        .pipe(ngAnnotate({
-            // true helps add where @ngInject is not used. It infers.
-            // Doesn't work with resolve, so we must be explicit there
-            add: true
-        }))
-        .pipe(embedTemplates())
-		.pipe(jshint())
-    	.pipe(jshint.reporter('default'))
-        .pipe(concat(appName + '.min.js'))
-        .pipe(gulp.dest('dist/js'))
-        .pipe(uglify())
-        .pipe(sourcemaps.write('./'))
-        .pipe(gulp.dest('dist/js'))
+	return gulp.src(app_scripts)
+	.pipe(plumber(plumberErrorHandler))
+	.pipe(sourcemaps.init())
+	.pipe(ngAnnotate({
+		// true helps add where @ngInject is not used. It infers.
+		// Doesn't work with resolve, so we must be explicit there
+		add: true
+	}))
+	.pipe(embedTemplates())
+	.pipe(jshint())
+	.pipe(jshint.reporter('default'))
+	.pipe(concat(appName + '.min.js'))
+	.pipe(gulp.dest('dist/js'))
+	.pipe(uglify())
+	.pipe(sourcemaps.write('./'))
+	.pipe(gulp.dest('dist/js'))
 });
 
 
 gulp.task('live', function() {
-    livereload.listen();
-    gulp.watch(stylesToDo, ['styles']);
+	livereload.listen();
+	gulp.watch(stylesToDo, ['styles']);
 	gulp.watch(stylesToDoVender, ['styles_vendor']);
-    gulp.watch(vendor_scripts, ['vendor_scripts']);
-    gulp.watch(app_scripts, ['app_scripts']);
-    gulp.watch(htmlToDo, ['app_scripts']);
+	gulp.watch(vendor_scripts, ['vendor_scripts']);
+	gulp.watch(app_scripts, ['app_scripts']);
+	gulp.watch(htmlToDo, ['app_scripts']);
 });
 
 gulp.task('default', [
-            'styles',
-			'styles_vendor',
-            'vendor_scripts',
-            'app_scripts',
-            'live'
-        ], function(){});
+	'styles',
+	'styles_vendor',
+	'vendor_scripts',
+	'app_scripts',
+	'live'
+], function(){});
