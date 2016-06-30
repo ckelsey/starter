@@ -85,14 +85,12 @@ gulp.task('install', function() {
 		'</html>';
 
     fs.writeFile('./index.html', html, function() {
-		fs.writeFile('./404.html', html, function() {
-			var filename = appName + '.loc.conf';
-		    var base = path.dirname(fs.realpathSync(__filename)) + '/';
-		    var file = 'server { listen ' + appName + '.loc; server_name ' + appName + '.loc; root ' + base + '; index index.html; error_page 404 404.html;}';
-		    fs.writeFile('./' + filename, file, function() {
-		        d.resolve(true);
-		    });
-	    });
+		var filename = appName + '.loc.conf';
+		var base = path.dirname(fs.realpathSync(__filename)) + '/';
+		var file = 'server { listen ' + appName + '.loc; server_name ' + appName + '.loc; root ' + base + '; index index.html; error_page 404 index.html;}';
+		fs.writeFile('./' + filename, file, function() {
+			d.resolve(true);
+		});
     });
 
     return d.promise;
