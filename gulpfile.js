@@ -75,7 +75,6 @@ gulp.task('install', function() {
 		pkg.name = path.basename(__dirname);
 		fs.writeFileSync("./package.json", JSON.stringify(pkg, null, "\t"));
 		pkg = require('./package.json');
-		console.log(pkg);
 	}
 
 	var html = '<!doctype html>' + "\r" +
