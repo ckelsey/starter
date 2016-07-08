@@ -29,7 +29,7 @@
     "devDependencies": {},
     "scripts": {
         "bower": "gulp bower",
-        "postinstall": "gulp install && gulp bower && bower install && gulp"
+        "postinstall": "gulp install && bower install && gulp"
     },
     "bower": {
         "angular": "latest",
