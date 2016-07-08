@@ -15,7 +15,8 @@ fs = require('fs'),
 q = require('q'),
 pkg = require('./package.json'),
 sourcemaps = require('gulp-sourcemaps'),
-jshint = require('gulp-jshint');
+jshint = require('gulp-jshint'),
+browserSync = require('browser-sync').create();
 
 var notifyInfo = {
 	title: 'Gulp',
@@ -137,6 +138,15 @@ gulp.task('bower', function() {
 	return d.promise;
 });
 
+gulp.task('browser-sync', function() {
+	browserSync.init({
+		server: {
+			baseDir: "./"
+		},
+		https: true
+	});
+});
+
 gulp.task('styles', function() {
 	return gulp.src(stylesToDo)
 	.pipe(plumber(plumberErrorHandler))
@@ -202,6 +212,7 @@ gulp.task('live', function() {
 	gulp.watch(vendor_scripts, ['vendor_scripts']);
 	gulp.watch(app_scripts, ['app_scripts']);
 	gulp.watch(htmlToDo, ['app_scripts']);
+	gulp.watch("dist/**").on('change', browserSync.reload);
 });
 
 gulp.task('default', [
@@ -209,5 +220,6 @@ gulp.task('default', [
 	'styles_vendor',
 	'vendor_scripts',
 	'app_scripts',
+	'browser-sync',
 	'live'
 ], function(){});

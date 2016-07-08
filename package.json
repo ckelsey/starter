@@ -23,12 +23,13 @@
         "gulp-angular-embed-templates": "^*",
         "q": "^*",
 		"jshint": "^*",
-		"gulp-jshint": "^*"
+		"gulp-jshint": "^*",
+		"browser-sync": "^*"
     },
     "devDependencies": {},
     "scripts": {
         "bower": "gulp bower",
-        "postinstall": "gulp bower && bower install"
+        "postinstall": "gulp install && gulp bower && bower install && gulp"
     },
     "bower": {
         "angular": "latest",
