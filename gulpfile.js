@@ -35,6 +35,11 @@ var plumberErrorHandler = {
 var appName = pkg.name === 'starter' ? path.basename(__dirname) : pkg.name;
 
 
+
+/*
+ * Update to use the files/directotries you want to watch and minify
+ */
+
 var stylesToDo = [
 	'src/style/*.scss',
 ];
@@ -62,21 +67,59 @@ var vendor_scripts = [
 	'bower_components/angular-animate/angular-animate.min.js'
 ];
 
+
+
+
+/*
+ * Just a test function
+ */
+
 gulp.task('teststuff', function() {
-	pkg.name = path.basename(__dirname);
-	fs.writeFileSync("./package.json", JSON.stringify(pkg, null, "\t"));
-	pkg = require('./package.json');
-	console.log(pkg);
+	// pkg.name = path.basename(__dirname);
+	// fs.writeFileSync("./package.json", JSON.stringify(pkg, null, "\t"));
+	// pkg = require('./package.json');
+	// console.log(pkg);
 });
 
-gulp.task('install', function() {
-	var d = q.defer();
 
+
+
+
+/* INSTALL
+ * Updates package.json name
+ * Creates index.html
+ * Creates an nginx.conf file if needed
+ * Creates bower.json
+ */
+
+gulp.task('install', ['package', 'index', 'nginx', 'bower']);
+
+
+
+
+
+/* PACKAGE
+ * Updates package.json name
+ */
+
+gulp.task('package', function() {
 	if(pkg.name === 'starter'){
 		pkg.name = path.basename(__dirname);
 		fs.writeFileSync("./package.json", JSON.stringify(pkg, null, "\t"));
 		pkg = require('./package.json');
 	}
+});
+
+
+
+
+
+/* INDEX
+ * Creates index.html
+ */
+
+gulp.task('install', function() {
+	var d = q.defer();
 
 	var html = '<!doctype html>' + "\r" +
 	'<html ng-app="app">' + "\r" +
@@ -99,16 +142,40 @@ gulp.task('install', function() {
 	'</html>';
 
 	fs.writeFile('./index.html', html, function() {
-		var filename = appName + '.loc.conf';
-		var base = path.dirname(fs.realpathSync(__filename)) + '/';
-		var file = 'server { listen ' + appName + '.loc; server_name ' + appName + '.loc; root ' + base + '; index index.html; error_page 404 index.html;}';
-		fs.writeFile('./' + filename, file, function() {
-			d.resolve(true);
-		});
+		d.resolve(true);
 	});
 
 	return d.promise;
 });
+
+
+
+
+
+/* NGINX
+ * Creates an nginx.conf file if needed
+ */
+
+gulp.task('nginx', function() {
+	var d = q.defer();
+
+	var filename = appName + '.loc.conf';
+	var base = path.dirname(fs.realpathSync(__filename)) + '/';
+	var file = 'server { listen ' + appName + '.loc; server_name ' + appName + '.loc; root ' + base + '; index index.html; error_page 404 index.html;}';
+	fs.writeFile('./' + filename, file, function() {
+		d.resolve(true);
+	});
+
+	return d.promise;
+});
+
+
+
+
+
+/* BOWER
+ * Creates bower.json
+ */
 
 gulp.task('bower', function() {
 	var d = q.defer();
@@ -138,6 +205,14 @@ gulp.task('bower', function() {
 	return d.promise;
 });
 
+
+
+
+
+/* BROWSER SYNC
+ * Starts bower server
+ */
+
 gulp.task('browser-sync', function() {
 	browserSync.init({
 		server: {
@@ -146,6 +221,15 @@ gulp.task('browser-sync', function() {
 		https: true
 	});
 });
+
+
+
+
+
+
+/* STYLES
+ * Minifies/compiles sass
+ */
 
 gulp.task('styles', function() {
 	return gulp.src(stylesToDo)
@@ -165,6 +249,14 @@ gulp.task('styles', function() {
 	.pipe(gulp.dest('dist/css'));
 });
 
+
+
+
+
+/* STYLES VENDOR
+ * Minifies/compiles sass from bower components
+ */
+
 gulp.task('styles_vendor', function() {
 	return gulp.src(stylesToDoVender)
 	.pipe(plumber(plumberErrorHandler))
@@ -177,6 +269,16 @@ gulp.task('styles_vendor', function() {
 });
 
 
+
+
+
+
+
+/* SCRIPTS VENDOR
+ * Minifies bower components js files
+ */
+
+
 gulp.task('vendor_scripts', function() {
 	return gulp.src(vendor_scripts)
 	.pipe(plumber(plumberErrorHandler))
@@ -184,6 +286,14 @@ gulp.task('vendor_scripts', function() {
 	.pipe(gulp.dest('dist/js'))
 });
 
+
+
+
+
+
+/* SCRIPTS
+ * Minifies js files
+ */
 
 gulp.task('app_scripts', function() {
 	return gulp.src(app_scripts)
@@ -204,6 +314,13 @@ gulp.task('app_scripts', function() {
 	.pipe(gulp.dest('dist/js'))
 });
 
+
+
+
+
+/* LIVE
+ * Watches for file changes
+ */
 
 gulp.task('live', function() {
 	livereload.listen();
