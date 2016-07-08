@@ -118,7 +118,7 @@ gulp.task('package', function() {
  * Creates index.html
  */
 
-gulp.task('install', function() {
+gulp.task('index', function() {
 	var d = q.defer();
 
 	var html = '<!doctype html>' + "\r" +
