@@ -135,7 +135,6 @@ gulp.task('index', function() {
 	"\t" + '<meta http-equiv="X-UA-Compatible" content="IE=edge">' + "\r" +
 	"\t" + '<meta name="description" content="">' + "\r" +
 	"\t" + '<meta name="viewport" content="width=device-width">' + "\r" +
-	"\t" + '<link rel="stylesheet" href="/lib/bower_components/font-awesome/css/font-awesome.min.css">' + "\r" +
 	"\t" + '<link rel="stylesheet" href="/dist/css/' + appName + '_vendor.min.css">' + "\r" +
 	"\t" + '<link rel="stylesheet" href="/dist/css/' + appName + '.min.css">' + "\r" +
 	"\t" + '<base href="/" />' + "\r" +
@@ -274,6 +273,16 @@ gulp.task('styles_vendor', function() {
 	}))
 	.pipe(minifycss())
 	.pipe(gulp.dest('dist/css'));
+});
+
+
+var moveFonts = [
+	'bower_components/font-awesome/fonts/*.*'
+];
+
+
+gulp.task('move_fonts', function(done) {
+   return gulp.src(moveFonts).pipe(gulp.dest('dist/fonts/'));
 });
 
 
@@ -429,6 +438,7 @@ gulp.task('live', function() {
 	livereload.listen();
 	gulp.watch(stylesToDo, ['styles']);
 	gulp.watch(stylesToDoVender, ['styles_vendor']);
+	gulp.watch(moveFonts, ['move_fonts']);
 	gulp.watch(vendor_scripts, ['vendor_scripts']);
 	gulp.watch(app_scripts, ['app_scripts']);
 	gulp.watch(htmlToDo, ['app_scripts']);
@@ -439,6 +449,8 @@ gulp.task('live', function() {
 
 gulp.task('default', [
 	'move_to_lib',
+	'move_source_maps',
+	'move_fonts',
 	'styles',
 	'styles_vendor',
 	'vendor_scripts',
