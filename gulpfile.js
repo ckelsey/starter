@@ -135,7 +135,7 @@ gulp.task('index', function() {
 	"\t" + '<meta http-equiv="X-UA-Compatible" content="IE=edge">' + "\r" +
 	"\t" + '<meta name="description" content="">' + "\r" +
 	"\t" + '<meta name="viewport" content="width=device-width">' + "\r" +
-	"\t" + '<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">' + "\r" +
+	"\t" + '<link rel="stylesheet" href="/lib/bower_components/font-awesome/css/font-awesome.min.css">' + "\r" +
 	"\t" + '<link rel="stylesheet" href="/dist/css/' + appName + '_vendor.min.css">' + "\r" +
 	"\t" + '<link rel="stylesheet" href="/dist/css/' + appName + '.min.css">' + "\r" +
 	"\t" + '<base href="/" />' + "\r" +
@@ -363,16 +363,20 @@ var localConfig = {
 	}
 };
 
+
+
 var buildFiles = [
-	'lib/font-awesome/css/font-awesome.min.css',
-	'lib/font-awesome/css/font-awesome.css.map',
-	'lib/font-awesome/fonts/*.*',
+	'lib/bower_components/font-awesome/css/font-awesome.min.css',
+	'lib/bower_components/font-awesome/css/font-awesome.css.map',
+	'lib/bower_components/font-awesome/fonts/*.*',
 	'dist/css/'+ appName +'_vendor.min.css',
 	'dist/css/'+ appName +'.min.css',
 	'dist/js/'+ appName +'_vendor.min.js',
 	'dist/js/'+ appName +'.min.js',
 	'dist/js/'+ appName +'.min.js.map',
 	'favicon.png',
+	'app.js',
+	'demo.html',
 	'index.html'
 ];
 
