@@ -338,6 +338,15 @@ gulp.task('move_to_lib', function(done) {
    return gulp.src(moveToLib, {base: './'}).pipe(gulp.dest('lib'));
 });
 
+var moveSourceMaps = [
+	'bower_components/ckc-angularjs-utility/dist/utility.min.js.map'
+];
+
+
+gulp.task('move_source_maps', function(done) {
+   return gulp.src(moveSourceMaps).pipe(gulp.dest('dist/js'));
+});
+
 
 
 
@@ -374,6 +383,7 @@ var buildFiles = [
 	'dist/js/'+ appName +'_vendor.min.js',
 	'dist/js/'+ appName +'.min.js',
 	'dist/js/'+ appName +'.min.js.map',
+	'dist/js/utility.min.js.map',
 	'favicon.png',
 	'app.js',
 	'demo.html',
@@ -423,6 +433,7 @@ gulp.task('live', function() {
 	gulp.watch(app_scripts, ['app_scripts']);
 	gulp.watch(htmlToDo, ['app_scripts']);
 	gulp.watch(moveToLib, ['move_to_lib']);
+	gulp.watch(moveSourceMaps, ['move_source_maps']);
 	gulp.watch("dist/**").on('change', browserSync.reload);
 });
 
