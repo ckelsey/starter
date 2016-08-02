@@ -1,3 +1,5 @@
+/*TODO watch fontawesome and move files to lib, update index.html */
+
 var gulp = require('gulp'),
 compass = require('gulp-compass'),
 autoprefixer = require('gulp-autoprefixer'),
@@ -16,7 +18,10 @@ q = require('q'),
 pkg = require('./package.json'),
 sourcemaps = require('gulp-sourcemaps'),
 jshint = require('gulp-jshint'),
-browserSync = require('browser-sync').create();
+browserSync = require('browser-sync').create(),
+awspublish = require('gulp-awspublish'),
+runSequence = require('run-sequence'),
+cloudfront = require('gulp-cloudfront-invalidate-aws-publish');
 
 var notifyInfo = {
 	title: 'Gulp',
@@ -64,7 +69,9 @@ var vendor_scripts = [
 	'bower_components/angular-sanitize/angular-sanitize.js',
 	'bower_components/angular-route/angular-route.js',
 	'bower_components/angular-loader/angular-loader.js',
-	'bower_components/angular-animate/angular-animate.min.js'
+	'bower_components/angular-animate/angular-animate.min.js',
+	'bower_components/ckc-angularjs-utility/dist/utility.min.js',
+	'bower_components/ngstorage/ngStorage.min.js',
 ];
 
 
@@ -92,7 +99,7 @@ gulp.task('teststuff', function() {
  * Creates bower.json
  */
 
-gulp.task('install', ['package', 'index', 'nginx', 'bower']);
+gulp.task('install', ['package', 'index', 'bower']);
 
 
 
@@ -128,6 +135,7 @@ gulp.task('index', function() {
 	"\t" + '<meta http-equiv="X-UA-Compatible" content="IE=edge">' + "\r" +
 	"\t" + '<meta name="description" content="">' + "\r" +
 	"\t" + '<meta name="viewport" content="width=device-width">' + "\r" +
+	"\t" + '<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">' + "\r" +
 	"\t" + '<link rel="stylesheet" href="/dist/css/' + appName + '_vendor.min.css">' + "\r" +
 	"\t" + '<link rel="stylesheet" href="/dist/css/' + appName + '.min.css">' + "\r" +
 	"\t" + '<base href="/" />' + "\r" +
@@ -318,6 +326,87 @@ gulp.task('app_scripts', function() {
 
 
 
+
+var moveToLib = [
+	'bower_components/font-awesome/css/font-awesome.min.css',
+	'bower_components/font-awesome/css/font-awesome.css.map',
+	'bower_components/font-awesome/fonts/*.*'
+];
+
+
+gulp.task('move_to_lib', function(done) {
+   return gulp.src(moveToLib, {base: './'}).pipe(gulp.dest('lib'));
+});
+
+
+
+
+
+
+
+
+
+var awsConfObject = require('./aws-config.json');
+
+var localConfig = {
+	buildSrc: './build/**/*',
+	getAwsConf: function (environment) {
+		// var conf = require('../../config/aws');
+
+		if (!awsConfObject[environment]) {
+			throw 'No aws conf for env: ' + environment;
+		}
+		if (!awsConfObject[environment + 'Headers']) {
+			throw 'No aws headers for env: ' + environment;
+		}
+		return { keys: awsConfObject[environment], headers: awsConfObject[environment + 'Headers'], distribution: awsConfObject[environment + 'Distribution'] };
+	}
+};
+
+var buildFiles = [
+	'lib/font-awesome/css/font-awesome.min.css',
+	'lib/font-awesome/css/font-awesome.css.map',
+	'lib/font-awesome/fonts/*.*',
+	'dist/css/'+ appName +'_vendor.min.css',
+	'dist/css/'+ appName +'.min.css',
+	'dist/js/'+ appName +'_vendor.min.js',
+	'dist/js/'+ appName +'.min.js',
+	'dist/js/'+ appName +'.min.js.map',
+	'favicon.png',
+	'index.html'
+];
+
+gulp.task('build', function(done) {
+	return gulp.src(buildFiles, {base: './'}).pipe(gulp.dest('build'));
+});
+
+gulp.task('publish', function(done) {
+	var awsConf = localConfig.getAwsConf('production');
+	var publisher = awspublish.create(awsConf.keys);
+	var cfSettings = {
+		distribution: awsConf.distribution,
+		accessKeyId: awsConf.keys.accessKeyId,
+		secretAccessKey: awsConf.keys.secretAccessKey,
+		//wait: true,
+		indexRootPaths: true
+	};
+
+	runSequence('build', function() {
+		gulp.src(localConfig.buildSrc)
+		//.pipe(awspublish.gzip({ ext: '' }))
+		.pipe(publisher.publish(awsConf.headers))
+		.pipe(cloudfront(cfSettings))
+		.pipe(publisher.cache())
+		.pipe(publisher.sync())
+		.pipe(awspublish.reporter());
+		done();
+	});
+});
+
+
+
+
+
 /* LIVE
  * Watches for file changes
  */
@@ -329,10 +418,12 @@ gulp.task('live', function() {
 	gulp.watch(vendor_scripts, ['vendor_scripts']);
 	gulp.watch(app_scripts, ['app_scripts']);
 	gulp.watch(htmlToDo, ['app_scripts']);
+	gulp.watch(moveToLib, ['move_to_lib']);
 	gulp.watch("dist/**").on('change', browserSync.reload);
 });
 
 gulp.task('default', [
+	'move_to_lib',
 	'styles',
 	'styles_vendor',
 	'vendor_scripts',
