@@ -1,10 +1,8 @@
+.awspublish-ckronos
+aws-config.json
+build/
 npm-debug.log
 .sass-cache/
 node_modules/
 bower_components/
 .DS_Store
-404.html
-bower.json
-dist/
-index.html
-starter.loc.conf

@@ -1,5 +1,3 @@
-/*TODO watch fontawesome and move files to lib, update index.html */
-
 var gulp = require('gulp'),
 compass = require('gulp-compass'),
 autoprefixer = require('gulp-autoprefixer'),
@@ -21,7 +19,8 @@ jshint = require('gulp-jshint'),
 browserSync = require('browser-sync').create(),
 awspublish = require('gulp-awspublish'),
 runSequence = require('run-sequence'),
-cloudfront = require('gulp-cloudfront-invalidate-aws-publish');
+cloudfront = require('gulp-cloudfront-invalidate-aws-publish'),
+toMarkdown = require('gulp-to-markdown');
 
 var notifyInfo = {
 	title: 'Gulp',
@@ -42,8 +41,8 @@ var appName = pkg.name === 'starter' ? path.basename(__dirname) : pkg.name;
 
 
 /*
- * Update to use the files/directotries you want to watch and minify
- */
+* Update to use the files/directotries you want to watch and minify
+*/
 
 var stylesToDo = [
 	'src/style/*.scss',
@@ -78,8 +77,8 @@ var vendor_scripts = [
 
 
 /*
- * Just a test function
- */
+* Just a test function
+*/
 
 gulp.task('teststuff', function() {
 	// pkg.name = path.basename(__dirname);
@@ -93,11 +92,11 @@ gulp.task('teststuff', function() {
 
 
 /* INSTALL
- * Updates package.json name
- * Creates index.html
- * Creates an nginx.conf file if needed
- * Creates bower.json
- */
+* Updates package.json name
+* Creates index.html
+* Creates an nginx.conf file if needed
+* Creates bower.json
+*/
 
 gulp.task('install', ['package', 'index', 'bower']);
 
@@ -106,8 +105,8 @@ gulp.task('install', ['package', 'index', 'bower']);
 
 
 /* PACKAGE
- * Updates package.json name
- */
+* Updates package.json name
+*/
 
 gulp.task('package', function() {
 	if(pkg.name === 'starter'){
@@ -122,8 +121,8 @@ gulp.task('package', function() {
 
 
 /* INDEX
- * Creates index.html
- */
+* Creates index.html
+*/
 
 gulp.task('index', function() {
 	var d = q.defer();
@@ -135,6 +134,8 @@ gulp.task('index', function() {
 	"\t" + '<meta http-equiv="X-UA-Compatible" content="IE=edge">' + "\r" +
 	"\t" + '<meta name="description" content="">' + "\r" +
 	"\t" + '<meta name="viewport" content="width=device-width">' + "\r" +
+	"\t" + '<link rel="icon" type="image/png" href="./favicon.png">' + "\r" +
+	"\t" + '<link rel="stylesheet" href="/demo/style.css">' + "\r" +
 	"\t" + '<link rel="stylesheet" href="/dist/css/' + appName + '_vendor.min.css">' + "\r" +
 	"\t" + '<link rel="stylesheet" href="/dist/css/' + appName + '.min.css">' + "\r" +
 	"\t" + '<base href="/" />' + "\r" +
@@ -143,7 +144,13 @@ gulp.task('index', function() {
 	"\t" + '<navigation></navigation>' + "\r" +
 	"\t" + '<div ng-view=""></div>' + "\r" +
 	"\t" + '<script src="/dist/js/' + appName + '_vendor.min.js"></script>' + "\r" +
-	"\t" + '<script src="/app.js"></script>' + "\r" +
+	"\t" + '<script src="/demo/app.js"></script>' + "\r" +
+	"\t" + '<script src="/demo/demo-compile.js"></script>' + "\r" +
+	"\t" + '<script src="/demo/demo-date-string.js"></script>' + "\r" +
+	"\t" + '<script src="/demo/demo-input.js"></script>' + "\r" +
+	"\t" + '<script src="/demo/demo-json-text.js"></script>' + "\r" +
+	"\t" + '<script src="/demo/do-cks.js"></script>' + "\r" +
+	"\t" + '<script src="/demo/demo-toggle-parent.js"></script>' + "\r" +
 	"\t" + '<script src="/dist/js/' + appName + '.min.js"></script>' + "\r" +
 	'</body>' + "\r" +
 	'</html>';
@@ -160,8 +167,8 @@ gulp.task('index', function() {
 
 
 /* NGINX
- * Creates an nginx.conf file if needed
- */
+* Creates an nginx.conf file if needed
+*/
 
 gulp.task('nginx', function() {
 	var d = q.defer();
@@ -181,8 +188,8 @@ gulp.task('nginx', function() {
 
 
 /* BOWER
- * Creates bower.json
- */
+* Creates bower.json
+*/
 
 gulp.task('bower', function() {
 	var d = q.defer();
@@ -217,15 +224,26 @@ gulp.task('bower', function() {
 
 
 /* BROWSER SYNC
- * Starts bower server
- */
+* Starts bower server
+*/
 
 gulp.task('browser-sync', function() {
+	var url = require("url");
+	var defaultFile = "index.html"
+
 	browserSync.init({
 		server: {
-			baseDir: "./"
-		},
-		https: true
+			baseDir: "./",
+			middleware: function(req, res, next) {
+				var fileName = url.parse(req.url);
+				fileName = fileName.href.split(fileName.search).join("");
+				var fileExists = fs.existsSync(__dirname + fileName);
+				if (!fileExists && fileName.indexOf("browser-sync-client") < 0) {
+					req.url = "/" + defaultFile;
+				}
+				return next();
+			}
+		}
 	});
 });
 
@@ -235,8 +253,8 @@ gulp.task('browser-sync', function() {
 
 
 /* STYLES
- * Minifies/compiles sass
- */
+* Minifies/compiles sass
+*/
 
 gulp.task('styles', function() {
 	return gulp.src(stylesToDo)
@@ -261,8 +279,8 @@ gulp.task('styles', function() {
 
 
 /* STYLES VENDOR
- * Minifies/compiles sass from bower components
- */
+* Minifies/compiles sass from bower components
+*/
 
 gulp.task('styles_vendor', function() {
 	return gulp.src(stylesToDoVender)
@@ -282,7 +300,7 @@ var moveFonts = [
 
 
 gulp.task('move_fonts', function(done) {
-   return gulp.src(moveFonts).pipe(gulp.dest('dist/fonts/'));
+	return gulp.src(moveFonts).pipe(gulp.dest('dist/fonts/'));
 });
 
 
@@ -292,8 +310,8 @@ gulp.task('move_fonts', function(done) {
 
 
 /* SCRIPTS VENDOR
- * Minifies bower components js files
- */
+* Minifies bower components js files
+*/
 
 
 gulp.task('vendor_scripts', function() {
@@ -309,8 +327,8 @@ gulp.task('vendor_scripts', function() {
 
 
 /* SCRIPTS
- * Minifies js files
- */
+* Minifies js files
+*/
 
 gulp.task('app_scripts', function() {
 	return gulp.src(app_scripts)
@@ -337,23 +355,23 @@ gulp.task('app_scripts', function() {
 
 
 var moveToLib = [
-	'bower_components/font-awesome/css/font-awesome.min.css',
-	'bower_components/font-awesome/css/font-awesome.css.map',
-	'bower_components/font-awesome/fonts/*.*'
+	// 'bower_components/font-awesome/css/font-awesome.min.css',
+	// 'bower_components/font-awesome/css/font-awesome.css.map',
+	// 'bower_components/font-awesome/fonts/*.*'
 ];
 
 
 gulp.task('move_to_lib', function(done) {
-   return gulp.src(moveToLib, {base: './'}).pipe(gulp.dest('lib'));
+	return gulp.src(moveToLib, {base: './'}).pipe(gulp.dest('lib'));
 });
 
 var moveSourceMaps = [
-	'bower_components/ckc-angularjs-utility/dist/utility.min.js.map'
+	'bower_components/angular/angular.min.js.map'
 ];
 
 
 gulp.task('move_source_maps', function(done) {
-   return gulp.src(moveSourceMaps).pipe(gulp.dest('dist/js'));
+	return gulp.src(moveSourceMaps).pipe(gulp.dest('dist/js'));
 });
 
 
@@ -430,9 +448,19 @@ gulp.task('publish', function(done) {
 
 
 
+gulp.task('readme', function() {
+	return gulp.src('./demo.html')
+	.pipe(toMarkdown())
+	.pipe(gulp.dest('./dist'));
+});
+
+
+
+
+
 /* LIVE
- * Watches for file changes
- */
+* Watches for file changes
+*/
 
 gulp.task('live', function() {
 	livereload.listen();
