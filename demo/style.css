@@ -6,17 +6,20 @@ body{
 	font-family: sans-serif;
 	font-size: 14px;
 	margin: 0px;
+}
+
+#demo-container{
 	padding-bottom: 70px;
 }
 
-.heading{
+#demo-container .heading{
 	margin: 0px auto 49px;
 	padding: 7px 21px;
 	background: #d27d09;
 	color: #fff;
 }
 
-.section{
+#demo-container .section{
 	max-width: 900px;
 	margin: 0px auto 49px;
 	padding: 7px 21px;
@@ -24,11 +27,11 @@ body{
 	box-sizing: border-box;
 }
 
-.section.collapsed {
+#demo-container .section.collapsed {
 	margin: 0px auto;
 }
 
-.section.collapsed h2 {
+#demo-container .section.collapsed h2 {
 	margin: 0px;
 	transition: margin .2s;
 	-webkit-transition: margin .2s;
@@ -36,7 +39,8 @@ body{
 	-ms-transition: margin .2s;
 }
 
-.section.collapsed .collapse, .section.collapsed .collapse *{
+#demo-container .section.collapsed .collapse,
+#demo-container .section.collapsed .collapse *{
 	font-size: 0px;
 	margin: 0px !important;
 	padding: 0px !important;
@@ -49,11 +53,11 @@ body{
 }
 
 
-.heading .section{
+#demo-container .heading .section{
 	margin: 0px auto;
 }
 
-h2{
+#demo-container h2{
 	padding: 14px;
 	color: #fff;
 	margin: 0px 0px 21px;
@@ -61,36 +65,36 @@ h2{
 	overflow: hidden;
 }
 
-.directives h2{
+#demo-container .directives h2{
 	background: #3b88a0;
 }
 
-.services h2{
+#demo-container .services h2{
 	background: #beaa83;
 }
 
-.info h2{
+#demo-container .info h2{
 	background: #dfe0e0;
 	color: #4e575f;
 }
 
-h2 span{
+#demo-container h2 span{
 	display: block;
 	line-height: 35px;
 }
 
-h2 small{
+#demo-container h2 small{
 	display: block;
 	font-size: 14px;
 	font-weight: 100;
 	line-height: 21px;
 }
 
-[demo-toggle-parent]{
+#demo-container [demo-toggle-parent]{
 	cursor: pointer;
 }
 
-code{
+#demo-container code{
 	display: block;
 	padding: 14px;
 	border-radius: 2px;
@@ -98,7 +102,7 @@ code{
 	color: #3b88a0;
 }
 
-button{
+#demo-container button{
 	padding: 7px 14px 8px;
 	background: #ecf7fb;
 	color: #6dbdd6;
@@ -110,7 +114,7 @@ button{
 	outline: none !important;
 }
 
-.date-button{
+#demo-container .date-button{
 	vertical-align: middle;
 	display: inline-block;
 	line-height: 21px;
@@ -124,35 +128,35 @@ button{
 	box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.21);
 }
 
-.date-button i{
+#demo-container .date-button i{
 	color: #1e81a0;
 	margin-left: 7px;
 }
 
-p{
+#demo-container p{
 	margin: 0px 0px 21px 0px;
 }
 
-p:last-child {
+#demo-container p:last-child {
 	margin: 0px;
 }
 
-.heading p:last-child {
+#demo-container .heading p:last-child {
 	margin: 0px 0px 21px 0px;
 }
 
-.options-wrapper{
+#demo-container .options-wrapper{
 	margin: 28px 0px;
 }
 
-.options-wrapper h3{
+#demo-container .options-wrapper h3{
 	margin: 0px;
 	padding: 21px;
 	background: #e0edf1;
 	color: #3b88a0;
 }
 
-.options{
+#demo-container .options{
 	background: #fff;
 	display: table;
 	width: 100%;
@@ -161,40 +165,40 @@ p:last-child {
 	overflow: hidden;
 }
 
-.options .option{
+#demo-container .options .option{
 	display: table-row;
 }
 
-.options .option > div{
+#demo-container .options .option > div{
 	display: table-cell;
 	padding: 21px 7px;
 	vertical-align: middle;
 	box-shadow: inset 0px -1px 0px 0px #ebebec;
 }
 
-.options .option > div:first-child{
+#demo-container .options .option > div:first-child{
 	padding: 21px 7px 21px 21px;
 }
 
-.options .option > div:last-child{
+#demo-container .options .option > div:last-child{
 	padding: 21px 21px 21px 7px;
 }
 
-.options .option.invalid > div{
+#demo-container .options .option.invalid > div{
 	background-color: #a10005;
 	box-shadow: inset 0px -1px 0px 0px #820004;
 }
 
-.options .option.invalid > div *{
+#demo-container .options .option.invalid > div *{
 	color: #fff;
 }
 
-.options .option b{
+#demo-container .options .option b{
 	color: #3b88a0;
 	font-size: 16px;
 }
 
-.options .option .options .option > div{
+#demo-container .options .option .options .option > div{
 	background: #f9f6f0;
 	box-shadow: inset 0px -1px 0px 0px #ebebec;
 	padding: 7px;
@@ -202,15 +206,18 @@ p:last-child {
 	font-size: 14px;
 }
 
-.services .options .option > div:first-child{
+#demo-container .services .options .option > div:first-child{
 	width: 25%;
 }
 
-.options .option .options .option b{
+#demo-container .options .option .options .option b{
 	color: #beaa83;
 }
 
-input, select, textarea, button{
+#demo-container input,
+#demo-container select,
+#demo-container textarea,
+#demo-container button{
 	display: block;
 	width: 100%;
 	box-sizing: border-box;
@@ -232,7 +239,7 @@ input, select, textarea, button{
 	border-radius: 2px;
 }
 
-input[type="checkbox"]{
+#demo-container input[type="checkbox"]{
 	-webkit-appearance: checkbox;
 	-moz-appearance: checkbox;
 	appearance: checkbox;
@@ -240,7 +247,7 @@ input[type="checkbox"]{
 	cursor: pointer;
 }
 
-textarea{
+#demo-container textarea{
 	min-height: 100px;
 	resize:vertical;
 	font-size: 12px;
@@ -248,20 +255,22 @@ textarea{
 	transition: none;
 }
 
-input:hover, select:hover, button:hover{
+#demo-container input:hover,
+#demo-container select:hover,
+#demo-container button:hover{
 	background: #fafafa;
 	transform: scale(1.1) translate3d(0,0,0);
 }
 
-input[type="checkbox"]:hover{
+#demo-container input[type="checkbox"]:hover{
 	transform: scale(1) translate3d(0,0,0);
 }
 
-textarea:hover{
+#demo-container textarea:hover{
 	background: #fafafa;
 }
 
-.sidebar-blur{
+#demo-container .sidebar-blur{
 	filter: blur(1px);
 	-webkit-filter: blur(1px);
 	-moz-filter: blur(1px);
@@ -269,7 +278,7 @@ textarea:hover{
 	opacity: .25
 }
 
-#sidebar{
+#demo-container #sidebar{
 	position: fixed;
 	right: 35%;
 	width: 30%;
@@ -287,7 +296,7 @@ textarea:hover{
 	box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.64), 0px 3px 15px rgba(0, 0, 0, 0.1), 0px 34px 91px #000;
 }
 
-#sidebar.active{
+#demo-container #sidebar.active{
 	font-size: 12px;
 	width: 90%;
 	right: 5%;
@@ -297,7 +306,7 @@ textarea:hover{
 	box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.64);
 }
 
-#sidebar a{
+#demo-container #sidebar a{
 	color: #fff;
 	text-decoration: none !important;
 	display: block;
@@ -309,46 +318,46 @@ textarea:hover{
 	font-size: 0px;
 }
 
-#sidebar.active a{
+#demo-container #sidebar.active a{
 	padding: 0px 7px;
 	line-height: 35px;
 	font-size: 12px;
 	box-shadow: inset 0px -1px 0px rgba(0, 0, 0, 0.22), 0px 1px 0px rgba(255, 255, 255, 0.04);
 }
 
-#sidebar h5{
+#demo-container #sidebar h5{
 	font-size: 0px;
 	margin: 0px;
 	padding: 0px;
 }
 
-#sidebar.active h5{
+#demo-container #sidebar.active h5{
 	font-size: 18px;
 	margin: 0px;
 	padding: 7px;
 }
 
-#sidebar.active h5.directives{
+#demo-container #sidebar.active h5.directives{
 	background: #3b88a0;
 }
 
-#sidebar.active h5.services{
+#demo-container #sidebar.active h5.services{
 	background: #beaa83;
 }
 
-.docks-transition{
+#demo-container .docks-transition{
 	transition: all .1s;
 }
 
-.sidebar-darken{
+#demo-container .sidebar-darken{
 
 }
 
-.error {
+#demo-container .error {
 	background-color: #a10005 !important;
 	color: #fff !important;
 }
 
-#readme p{
+#demo-container #readme p{
 	margin: 0px;
 }
