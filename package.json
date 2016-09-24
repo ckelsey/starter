@@ -8,7 +8,6 @@
 	"dependencies": {
 		"bower": "^*",
 		"browser-sync": "^*",
-		"fs": "^*",
 		"gulp": "^*",
 		"gulp-angular-embed-templates": "^*",
 		"gulp-autoprefixer": "^*",
