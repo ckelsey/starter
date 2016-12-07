@@ -49,12 +49,12 @@ var stylesToDo = [
 ];
 
 var stylesToDoVender = [
-	'bower_components/font-awesome/css/font-awesome.min.css'
+	'bower_components/fontawesome/css/font-awesome.min.css'
 ];
 
 var htmlToDo = [
 	'*.html',
-	'src/html/*.html'
+	'src/**/**.html'
 ];
 
 var app_scripts = [
