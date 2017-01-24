@@ -27,7 +27,10 @@
 		"gulp-uglify": "^*",
 		"jshint": "^*",
 		"q": "^*",
-		"run-sequence": "^*"
+		"run-sequence": "^*",
+		"gulp-load-plugins": "^*",
+		"gulp-flatmap": "^*",
+		"gulp-sass": "^*"
 	},
 	"devDependencies": {},
 	"scripts": {
@@ -39,6 +42,12 @@
 		"angular-loader": "latest",
 		"angular-resource": "latest",
 		"angular-route": "latest",
-		"angular-sanitize": "latest"
+		"angular-sanitize": "latest",
+		"fontawesome": "latest",
+		"ckc-angularjs-utility": "latest",
+		"do-ck": "latest",
+		"ackolor": "latest",
+		"ngstorage": "latest",
+		"ckronos": "latest"
 	}
 }
